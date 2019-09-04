@@ -1,3 +1,4 @@
 .stack-work/
 unicodedata.cabal
 *~
+stack.yaml.lock
