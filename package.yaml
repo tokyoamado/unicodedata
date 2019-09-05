@@ -21,9 +21,14 @@ description:         Please see the README on GitHub at <https://github.com/gith
 
 dependencies:
 - base >= 4.7 && < 5
+- attoparsec
+- containers
+- template-haskell
+- text
 
 library:
   source-dirs: src
+  #ghc-options: -Wall
 
 tests:
   unicodedata-test:
