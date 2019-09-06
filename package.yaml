@@ -28,6 +28,7 @@ dependencies:
 
 library:
   source-dirs: src
+  ghc-options: -fobject-code
   #ghc-options: -Wall
 
 tests:
