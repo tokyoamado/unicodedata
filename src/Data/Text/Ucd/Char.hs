@@ -8,8 +8,9 @@ module Data.Text.Ucd.Char
   ) where
 
 import Data.Char (chr, ord, toLower, toUpper)
+import Data.List.Split (splitOn)
 import Language.Haskell.TH (runIO)
-import Numeric (showHex)
+import Numeric (readHex, showHex)
 import qualified Data.IntMap as I
 import qualified Data.Map.Strict as M
 import qualified Data.Text as T
@@ -33,10 +34,16 @@ nameOf c = case I.lookupLE (ord c) nameDic of
 charOf :: String -> Maybe Char
 charOf s = case M.lookup (norm s) nameDicRev of
   Just (Single cp _) -> Just $ chr cp
-  Just (Range b e n) -> Nothing  -- Don't support range.
-  Nothing -> Nothing
+  _ -> do
+    n <- c
+    m <- if (norm . nameOf) n == norm s then Just n else Nothing
+    return m
   where
     norm = map toUpper . filter (\c -> c `notElem` (" -_" :: String))
+    ws = splitOn "-" s
+    hex = last ws
+    hs = readHex hex
+    c = if (length hex == 4 || length hex == 5) && hs /= [] && (snd . head) hs == "" then (Just . chr . fst . head) hs else Nothing
 
 blockOf :: Char -> String
 blockOf c = case I.lookupLE (ord c) blockDic of
